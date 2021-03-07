@@ -3,7 +3,7 @@
 ## Level 2.1 - Introduction to Producers
 Implement a small application that send some messages to a Kafka topic.
 
-1. Create a topic "numbers" with 3 replicas and at least 3 partitions.
+1. Create a topic `numbers` with 3 replicas and at least 3 partitions.
 2. Update the `SimpleProducerApp` and let it write 100 numbers to the topic.
 3. Use the "kafka-console-consumer" to consume these numbers. **How to explain the order of the output?**
 
@@ -29,28 +29,3 @@ Let's examine the effects of various producer config properties and the impact o
     - `acks`: 0, 1, all
     - `batch.size`: 20, 200, 2000, 20000
 3. Repeat the experiment using a **sync** producer instead of an async one. **How to explain the difference?**
-
-
-## Level 2.3 - Dealing with Objects
-Instead of sending primitive integers or strings, producers can also deal with
-objects. This requires the usage of a custom `Serializer` that is used to
-convert an instance of a POJO into bytes.
-
-For this exercise, let us assume a simple user class with the properties `name`,
-`age` and `favoriteColor`. The username is mandatory, all other fields are
-optional.
-
-For the sake of simplicity, the objects shall be written in a simple JSON
-format, so we can use the "kafka-console-consumer" to consume these messages:
-```
-{
-  "name": "Alice",
-  "age": 33,
-  "favorite_color": "green"
-}
-```
-
-1. Create a POJO named `User`.
-2. Implement a custom `Serializer` that converts users into a JSON format.
-3. Update the producer app to create, update and delete some users. **How to configure the topic to store user data
-   more efficiently?**
