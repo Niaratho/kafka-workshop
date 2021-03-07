@@ -1,7 +1,7 @@
 # 2 - Writing Messages to Kafka
 
 ## Level 2.1 - Introduction to Producers
-Implement a small application that send some messages to a Kafka topic.
+Write a small application that send some messages to a Kafka topic.
 
 1. Create a topic `numbers` with 3 replicas and at least 3 partitions.
 2. Update the `SimpleProducerApp` and let it write 100 numbers to the topic.
@@ -22,7 +22,7 @@ the producers of messages.
 
 Let's examine the effects of various producer config properties and the impact of synchronous and asynchronous sends.
 
-**Key Results**
+**Tasks**
 1. Add a stopwatch (e.g. org.apache.commons:commons-lang3) to the producer app which measures the duration of the
    send process.
 2. Measure the time it takes to send one million messages **asynchronously** using different producer configs:
