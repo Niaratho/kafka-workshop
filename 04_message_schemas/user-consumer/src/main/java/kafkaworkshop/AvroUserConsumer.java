@@ -37,7 +37,7 @@ public class AvroUserConsumer {
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
 
         KafkaConsumer<String, User> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("users"));
+        consumer.subscribe(Collections.singletonList("users-avro"));
         while (true) {
             ConsumerRecords<String, User> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, User> record : records) {

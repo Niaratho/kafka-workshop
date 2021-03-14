@@ -40,7 +40,7 @@ public class AvroWithoutRegistryUserConsumer {
         props.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, MyCustomUserDeserializer.class.getName());
 
         KafkaConsumer<String, User> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList("users2"));
+        consumer.subscribe(Collections.singletonList("users-avro-without-registry"));
         while (true) {
             ConsumerRecords<String, User> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, User> record : records) {
