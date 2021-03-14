@@ -39,6 +39,9 @@ the partitions manually.
 1. Create a topic named `manual-partitioning` with 10 partitions.
 2. Write a producer that generates 1,000 random integers and sends them to this topic. The lowest digit of each number
    determines the number of the partition to send the message to.
-3. Start a group of three console consumer instances in that read from this topic. Make sure that one of the consumers
-   exclusively reads from partition 5. This is supposed to emulate a setup where a dedicated consumer is supposed to
-   handle all the traffic of a specific source (e.g. customer).
+3. Start a group of several console consumer instances that read from this topic. Check the output
+
+**Bonus**
+- Start another consumer that exclusively reads from partition 5. This is supposed to emulate a setup where a
+  dedicated consumer is supposed to handle all the traffic of a specific source (e.g. customer). Try to add this
+  consumer to the aforementioned consumer group.
