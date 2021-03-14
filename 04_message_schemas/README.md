@@ -8,16 +8,35 @@ In the previous exercises we have sent and consumed plain text messages
 containing simple strings. Up next, we will deal with objects using JSON and a
 popular binary format.
 
+## Prerequisites
+Some of the following exercises will make use of some Confluent specific components,
+(e.g. `KafkaAvroSerializer`) to spare us from writing
+our own serializer and deserializer. For this to work, we need a
+[Confluent Schema Registry](https://www.confluent.io/confluent-schema-registry/)
+up and running. The registry provides us with the possibility to upload and
+manage schemas for message keys and values. This will help us to keep the data
+of a topic consistent.
+
+For convenience, we will set up a minimalistic environment, consisting of one ZooKeeper instance, one Kafka broker
+and a Schema Registry. The environment can be started via Docker:
+```
+docker-compose up
+```
+
+When finished, press `Ctrl-C` to shut everything down. Note, that this setup does not any persistent
+volumes in this setup, so all data will be lost!
+
+
 ## Level 4.1 - Dealing with Objects
 Instead of sending primitive integers or strings, producers can also deal with
 objects. This requires the usage of a custom `Serializer` that is used to
 convert an instance of a POJO into bytes.
 
-For this exercise, let us assume a simple `User` class with the properties 
+For this exercise, let's create a `SimpleUser` class with the properties
 `name`, `age` and `favoriteColor`. The name shall be mandatory, all other
 fields are optional.
 ```
-class User {
+class SimpleUser {
     public enum Color {
         red, yellow, blue, green
     }
@@ -38,9 +57,8 @@ For the sake of simplicity, the resulting JSON should look like the following:
 ```
 
 **Tasks**
-1. Create a `User` class.
-2. Implement a custom `Serializer` that converts users into a JSON format.
-3. Update the producer app to send "create", "update" and "delete" events. Use the `kafka-console-consumer` to
+1. Implement a custom `Serializer` that converts users into a JSON format.
+2. Update the producer app to send "create", "update" and "delete" events. Use the `kafka-console-consumer` to
    consume these messages. **How to configure the topic to store user data more efficiently?**
 
 
@@ -48,10 +66,10 @@ For the sake of simplicity, the resulting JSON should look like the following:
 A very common issue when implementing stream processing pipelines with Kafka
 is a mismatch between the expected and actual message format. Kafka itself
 does not care about the message content, so it does not have any build-in
-mechanisms for ensuring data consistency. Let us examine this problem 
+mechanisms for ensuring data consistency. Let's examine this problem.
 
 **Tasks**
-1. Update the consumer app, so that it can deserialize `User` messages.
+1. Update the `user-consumer app`, so that it can deserialize `SimpleUser` messages.
 2. Let the producer send a continuous flow of messages. Use the new consumer to parse these messages.
 3. Use the `kafka-console-producer` to send a few messages that do not comply with the known user schema, e.g. by
    introducing additional fields or sending entirely different content. Examine the behaviour of the consumer
@@ -63,7 +81,7 @@ Dealing with plain text message formats like XML and JSON allows us to quickly
 inspect the content of a topic or build additional producers and consumers. 
 However, one downside of that approach is an increased message size. This might
 not be an issue for small use cases with only a couple of thousand message to
-deal with. On a big scale, where billions of messages have to be sent and
+deal with. On a big scale, where billions of messages have to be processed and
 potentially saved for a long period of time, this might not be the best
 approach.
 
@@ -76,15 +94,6 @@ languages.
 
 A good explanation of why using Avro for Kafka data can be found in the
 [Confluent blog](https://www.confluent.io/blog/avro-kafka-data/).
-
-**Prerequisites**
-We will make use of the Confluent KafkaAvroSerializer to spare us from writing
-our own serializer and deserializer. For this to work, we need a
-[Confluent Schema Registry](https://www.confluent.io/confluent-schema-registry/)
-up and running. The registry provides us with the possibility to upload and
-manage schemas for message keys and values. This will help us to keep the data
-of a topic consistent.
-
 
 **Tasks**
 1. Place the following file at `src/main/avro/user.avsc`
