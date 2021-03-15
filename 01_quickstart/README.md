@@ -91,7 +91,7 @@
    ps aux | grep server-1.properties
    kill -9 (process_id)
    ```
-   - Find information about re-balancing in the broker logs
+   - Check the broker logging output and find information on leadership reassignment
 
 6. Check the status of the topic
    - Which broker is the leader of which partition?
@@ -99,12 +99,12 @@
 
 7. Start another console consumer and check its output
 
-8. Send some more messages and check all consumers
+8. Send some more messages and check the consumer
 
 9. Revive the killed broker
    - Check the logging output of all brokers
 
-10. Send some more messages and check all consumers
+10. Send some more messages and check the consumer
 
 
 ## Level 1.3 - Working with consumer groups
