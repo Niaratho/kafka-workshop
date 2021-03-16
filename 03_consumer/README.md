@@ -56,12 +56,14 @@ consumers may continue consuming messages without interruption. Let's see this i
 2. Start three instances of the updated consumer that work together in a group. Make sure to use individual static
    group membership ids.
 3. Use the `kafka-consumer-groups` command to monitor the partition assignments of the consumers.
-4. Stop one consumer. Check the partition assignments of the consumers again. Note, how one partition is not being 
-   read from as it is not assigned.
-5. Revive the dead consumer and check the partition assignments of the consumers again. The consumer should be assigned
-   the same partition as previously. The other two should not have been interrupted at all. 
-6. Stop another consumer. Repeatedly watch the output of the `kafka-consumer-groups` command and wait for the session
-   to time out and the initiation of the partition rebalancing.
+4. Stop one consumer. Check the partition assignments of the consumers again. All partitions are still assigned to a
+   consumer, but some partitions are not being read from anymore, i.e. their "current offset" does not change. That is
+   because the death of the consumer did not trigger a partition rebalance immediately.
+5. Revive the dead consumer. Check the broker logging output and the partition assignments of the consumers. The
+   revived consumer should be assigned to the same partition as before. The other two should not have been 
+   interrupted at all. 
+6. Stop another consumer and wait for the session to time out. Check the broker logging output and the partition
+   assignments of the consumers again. A regular partition rebalancing should have taken place.
 
 **Bonus**
 - What would happen if the dead consumer would be revived and killed over and over again? 
