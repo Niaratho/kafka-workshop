@@ -61,6 +61,9 @@ For the sake of simplicity, the resulting JSON should look like the following:
 2. Update the producer app to send "create", "update" and "delete" events. Use the `kafka-console-consumer` to
    consume these messages. **How to configure the topic to store user data more efficiently?**
 
+**Learning Objectives**
+- understanding of how to send complex data in events
+
 
 ## Level 4.2 - The Dangers of Schemaless Messages 
 A very common issue when implementing stream processing pipelines with Kafka
@@ -74,6 +77,9 @@ mechanisms for ensuring data consistency. Let's examine this problem.
 3. Use the `kafka-console-producer` to send a few messages that do not comply with the known user schema, e.g. by
    introducing additional fields or sending entirely different content. Examine the behaviour of the consumer
    application. **How to enable the consumer to continue working properly in case of such events?**
+
+**Learning Objectives**
+- understanding the risks of incompatible data format
 
 
 ## Level 4.3 - Avro Producer
@@ -128,6 +134,10 @@ A good explanation of why using Avro for Kafka data can be found in the
 10. Inspect the topic with the kafka-console-consumer.
 11. Use the REST API of the Confluent Schema Registry to inspect the schema stored in the registry.
 
+**Learning Objectives**
+- sending events with binary message format
+- using messages schemas to avoid incompatible message format
+
 
 ## Level 4.4 - Avro Consumer
 Now, let's create a consumer that is able to read users from Kafka.
@@ -139,6 +149,10 @@ Now, let's create a consumer that is able to read users from Kafka.
 4. Start the consumer and fetch the users written to the topic. If the consumer does not retrieve any data, find a
    way to convince it. **Hint:** `seek()` or `auto.offset.reset`
 5. Inspect the data retrieved with a debugger. **What is different from what we expected? How to fix that?**
+
+**Learning Objectives**
+- consuming events with binary message format
+- using messages schemas to prevent consuming messages with incompatible message format
 
 
 ## Level 4.5 - Evolution of a Schema
@@ -156,6 +170,9 @@ Let's add a backward compatible change to our schema.
 1. Add a new optional field "last_name" and update producer and consumer **in the correct order.**
 2. Add another backward compatible change to the schema and update only the producer. **What happens on the consumer side?**
 3. Add an incompatible change to the schema and try producing and consuming a message. **What happens?**
+
+**Learning Objectives**
+- evolving message format using schemas
 
 
 ## Level 4.6 - Using Avro without Schema Registry
@@ -175,4 +192,6 @@ use them to send and consume users
 **Bonus:**
 - Add a backward compatible change to the schema and update the consumers and producers. **What happens?**
 - Add an incompatible change to the schema and update the consumers and producers. **What happens?**
-  
+
+**Learning Objectives**
+- using binary format without external schema registries
