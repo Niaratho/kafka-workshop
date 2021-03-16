@@ -10,11 +10,9 @@ topic to the console - similar to the functionality of the
    (see exercise 2.1).
 2. Set property `auto.offset.reset` to `earliest` to allow consuming messages that have been produced before the
    consumer was started.
-3. Start the application and check its output.
-4. Stop and restart the consumer application. Note, that it does not print any messages, despite property
-   `auto.offset.reset` being set to `earliest`
-5. Update the consumer group setting and restart the application. Note, how it now prints all messages from the
-   beginning of the topic. **What causes this different behaviour compared to the previous step?**
+3. Start the application and check its output. Wait until all numbers have been consumed.
+4. Stop and restart the consumer application. **Why does the consumer not print any messages, despite property
+   `auto.offset.reset` being set to `earliest`? How to fix that?**
 
 **Learning Objectives**
 - creating consumer applications
@@ -30,11 +28,12 @@ For this, we must enable the consumer to join a group.
 1. Update the `SimpleConsumerApp` to allow multiple instances to work together in groups.
 2. To make the effects of multiple consumers working together more visible, add a sleeping period (e.g. 250 ms)
    before consuming the next messages. This simulates the computation work a regular consumer would have to do.
-3. Update the `SimpleProducerApp` to continuously send random numbers to the `numbers` topic. Start several fast and
-   slow consumers in different groups and consume these messages.
-4. Use the `kafka-consumer-groups` command to monitor the consumer offsets and lags of the groups.
+3. Update the `SimpleProducerApp` to continuously send random numbers to the `numbers` topic. 
+4. Start several fast and slow consumers in different groups to consume these messages. Use the `kafka-consumer-groups`
+   command to monitor the consumer offsets and lags of the groups.
 5. Dynamically add and remove group members by starting and stopping consumer instances. Observe the rebalancing
-   behaviour by checking the output of the `kafka-consumer-groups` command.
+   behaviour by checking the broker logging output and the partition assignments as shown by the
+   `kafka-consumer-groups` command.
 
 **Learning Objectives**
 - speed up processing of large topics by grouping multiple consumers
