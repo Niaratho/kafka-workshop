@@ -11,9 +11,14 @@ topic to the console - similar to the functionality of the
 2. Set property `auto.offset.reset` to `earliest` to allow consuming messages that have been produced before the
    consumer was started.
 3. Start the application and check its output.
+4. Stop and restart the consumer application. Note, that it does not print any messages, despite property
+   `auto.offset.reset` being set to `earliest`
+5. Update the consumer group setting and restart the application. Note, how it now prints all messages from the
+   beginning of the topic. **What causes this different behaviour compared to the previous step?**
 
 **Learning Objectives**
-- understanding of how to create a minimalistic consumer application
+- creating consumer applications
+- understanding consumer offset management
 
 
 ## Level 3.2 - Understanding Consumer Groups
@@ -32,7 +37,7 @@ For this, we must enable the consumer to join a group.
    behaviour by checking the output of the `kafka-consumer-groups` command.
 
 **Learning Objectives**
-- understanding of how to scaling the consumer side
+- speed up processing of large topics by grouping multiple consumers
 - seeing multiple consumers process messages at their own pace
 - understanding the root cause of consumer lags and how to deal with them
 - identifying the source of partition rebalances  
@@ -63,5 +68,5 @@ consumers may continue consuming messages without interruption. Let's see this i
 - What would happen if the dead consumer would be revived and killed over and over again? 
 
 **Learning Objectives**
-- basic understanding of how to minimize the number of necessary partition rebalances
+- minimizing the number of partition rebalances
 - understanding the consequences of messing with the rebalancing protocol
