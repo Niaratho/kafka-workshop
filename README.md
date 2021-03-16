@@ -12,6 +12,7 @@ bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic my-topic
 #### Consumer Groups
 ```
 bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --all-groups
 bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-group
 ```
 
