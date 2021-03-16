@@ -10,11 +10,9 @@ topic to the console - similar to the functionality of the
    (see exercise 2.1).
 2. Set property `auto.offset.reset` to `earliest` to allow consuming messages that have been produced before the
    consumer was started.
-3. Start the application and check its output.
-4. Stop and restart the consumer application. Note, that it does not print any messages, despite property
-   `auto.offset.reset` being set to `earliest`
-5. Update the consumer group setting and restart the application. Note, how it now prints all messages from the
-   beginning of the topic. **What causes this different behaviour compared to the previous step?**
+3. Start the application and check its output. Wait until all numbers have been consumed.
+4. Stop and restart the consumer application. **Why does the consumer not print any messages, despite property
+   `auto.offset.reset` being set to `earliest`? How to fix that?**
 
 **Learning Objectives**
 - creating consumer applications
@@ -30,11 +28,12 @@ For this, we must enable the consumer to join a group.
 1. Update the `SimpleConsumerApp` to allow multiple instances to work together in groups.
 2. To make the effects of multiple consumers working together more visible, add a sleeping period (e.g. 250 ms)
    before consuming the next messages. This simulates the computation work a regular consumer would have to do.
-3. Update the `SimpleProducerApp` to continuously send random numbers to the `numbers` topic. Start several fast and
-   slow consumers in different groups and consume these messages.
-4. Use the `kafka-consumer-groups` command to monitor the consumer offsets and lags of the groups.
+3. Update the `SimpleProducerApp` to continuously send random numbers to the `numbers` topic. 
+4. Start several fast and slow consumers in different groups to consume these messages. Use the `kafka-consumer-groups`
+   command to monitor the consumer offsets and lags of the groups.
 5. Dynamically add and remove group members by starting and stopping consumer instances. Observe the rebalancing
-   behaviour by checking the output of the `kafka-consumer-groups` command.
+   behaviour by checking the broker logging output and the partition assignments as shown by the
+   `kafka-consumer-groups` command.
 
 **Learning Objectives**
 - speed up processing of large topics by grouping multiple consumers
@@ -57,12 +56,14 @@ consumers may continue consuming messages without interruption. Let's see this i
 2. Start three instances of the updated consumer that work together in a group. Make sure to use individual static
    group membership ids.
 3. Use the `kafka-consumer-groups` command to monitor the partition assignments of the consumers.
-4. Stop one consumer. Check the partition assignments of the consumers again. Note, how one partition is not being 
-   read from as it is not assigned.
-5. Revive the dead consumer and check the partition assignments of the consumers again. The consumer should be assigned
-   the same partition as previously. The other two should not have been interrupted at all. 
-6. Stop another consumer. Repeatedly watch the output of the `kafka-consumer-groups` command and wait for the session
-   to time out and the initiation of the partition rebalancing.
+4. Stop one consumer. Check the partition assignments of the consumers again. All partitions are still assigned to a
+   consumer, but some partitions are not being read from anymore, i.e. their "current offset" does not change. That is
+   because the death of the consumer did not trigger a partition rebalance immediately.
+5. Revive the dead consumer. Check the broker logging output and the partition assignments of the consumers. The
+   revived consumer should be assigned to the same partition as before. The other two should not have been 
+   interrupted at all. 
+6. Stop another consumer and wait for the session to time out. Check the broker logging output and the partition
+   assignments of the consumers again. A regular partition rebalancing should have taken place.
 
 **Bonus**
 - What would happen if the dead consumer would be revived and killed over and over again? 
