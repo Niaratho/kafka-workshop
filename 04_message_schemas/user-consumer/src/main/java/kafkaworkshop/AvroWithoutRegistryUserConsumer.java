@@ -1,19 +1,12 @@
 package kafkaworkshop;
 
-import org.apache.avro.io.BinaryDecoder;
-import org.apache.avro.io.DatumReader;
-import org.apache.avro.io.DecoderFactory;
-import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.errors.SerializationException;
-import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
@@ -37,7 +30,7 @@ public class AvroWithoutRegistryUserConsumer {
         props.setProperty(AUTO_COMMIT_INTERVAL_MS_CONFIG, "36000000");
         props.setProperty(AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        props.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, MyCustomUserDeserializer.class.getName());
+        props.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, AvroWithoutRegistryUserDeserializer.class.getName());
 
         KafkaConsumer<String, User> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList("users-avro-without-registry"));
@@ -53,21 +46,3 @@ public class AvroWithoutRegistryUserConsumer {
     }
 }
 
-class MyCustomUserDeserializer implements Deserializer<User> {
-
-    @Override
-    public User deserialize(String topic, byte[] data) {
-        if (data == null) {
-            return null;
-        }
-
-        try {
-            BinaryDecoder binaryDecoder = DecoderFactory.get().binaryDecoder(data, null);
-            DatumReader<User> userDatumReader = new SpecificDatumReader<>(User.class);
-
-            return userDatumReader.read(null, binaryDecoder);
-        } catch (IOException e) {
-            throw new SerializationException("Unable to deserialize data from topic='" + topic + "'", e);
-        }
-    }
-}

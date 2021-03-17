@@ -1,18 +1,12 @@
 package kafkaworkshop;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
-import lombok.Data;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class SimpleUserProducer {
@@ -45,24 +39,3 @@ public class SimpleUserProducer {
     }
 }
 
-@Data
-@Builder
-class SimpleUser {
-    public enum Color {
-        red, yellow, blue, green
-    }
-
-    private String name;
-    private int age;
-    @SerializedName("favorite_color")
-    private Color favoriteColor;
-}
-
-class SimpleUserSerializer implements Serializer<SimpleUser> {
-    private static final Gson gson = new Gson();
-
-    @Override
-    public byte[] serialize(String topic, SimpleUser user) {
-        return gson.toJson(user).getBytes(StandardCharsets.UTF_8);
-    }
-}
